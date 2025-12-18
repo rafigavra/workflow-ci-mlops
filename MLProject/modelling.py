@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 # =========================
 # Load Dataset (PREPROCESSED)
 # =========================
-data = pd.read_csv("preprocessing/titanic_preprocessed.csv")
+data = pd.read_csv("titanic_preprocessed.csv")
 
 X = data.drop("Survived", axis=1)
 y = data["Survived"]
