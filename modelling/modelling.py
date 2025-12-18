@@ -1,0 +1,44 @@
+import pandas as pd
+import mlflow
+import mlflow.sklearn
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# =========================
+# Load Dataset (PREPROCESSED)
+# =========================
+data = pd.read_csv("preprocessing/titanic_preprocessed.csv")
+
+X = data.drop("Survived", axis=1)
+y = data["Survived"]
+
+# =========================
+# Train Test Split
+# =========================
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# =========================
+# MLflow Autolog
+# =========================
+mlflow.set_experiment("Titanic-Classification")
+mlflow.sklearn.autolog()
+
+with mlflow.start_run():
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred)
+    rec = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    print("Accuracy:", acc)
+    print("Precision:", prec)
+    print("Recall:", rec)
+    print("F1 Score:", f1)
